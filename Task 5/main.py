@@ -1,13 +1,18 @@
+'''
+Contains the code for running a game
+'''
 import game
 
 kitchen = game.Room("Kitchen")
 kitchen.set_description("A dank and dirty room buzzing with flies.")
 
 dining_hall = game.Room("Dining Hall")
-dining_hall.set_description("A large room with ornate golden decorations on each wall.")
+dining_hall.set_description(
+    "A large room with ornate golden decorations on each wall.")
 
 ballroom = game.Room("Ballroom")
-ballroom.set_description("A vast room with a shiny wooden floor. Huge candlesticks guard the entrance.")
+ballroom.set_description(
+    "A vast room with a shiny wooden floor. Huge candlesticks guard the entrance.")
 
 kitchen.link_room(dining_hall, "south")
 dining_hall.link_room(kitchen, "north")
@@ -19,7 +24,8 @@ dave.set_conversation("What's up, dude! I'm hungry.")
 dave.set_weakness("cheese")
 dining_hall.set_character(dave)
 
-tabitha = game.Enemy("Tabitha", "An enormous spider with countless eyes and furry legs.")
+tabitha = game.Enemy(
+    "Tabitha", "An enormous spider with countless eyes and furry legs.")
 tabitha.set_conversation("Sssss....I'm so bored...")
 tabitha.set_weakness("book")
 ballroom.set_character(tabitha)
@@ -37,7 +43,7 @@ backpack = []
 
 dead = False
 
-while dead == False:
+while not dead:
 
     print("\n")
     current_room.get_details()
@@ -68,7 +74,7 @@ while dead == False:
             # Do I have this item?
             if fight_with in backpack:
 
-                if inhabitant.fight(fight_with) == True:
+                if inhabitant.fight(fight_with):
                     # What happens if you win?
                     print("Hooray, you won the fight!")
                     current_room.character = None
