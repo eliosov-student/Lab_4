@@ -42,6 +42,12 @@ class Character:
         print(f'{self.name} is here!\n{self.description}')
 
 
+class Laydak(Character):
+    '''
+    The joke is that this class literally does nothing
+    '''
+
+
 class Enemy(Character):
     '''
     An enemy object for the game
@@ -57,18 +63,9 @@ class Enemy(Character):
         Simulates a fight
         '''
         if self.weakness == item:
-            self.defeated += 1
+            self.defeated = True
             return True
         return False
-
-    def describe(self):
-        '''
-        Describes the character
-        '''
-        print(
-            f'{self.name} - {self.description}\n'
-            f'Weakness: {self.weakness}'
-        )
 
 
 class Friend(Character):
@@ -169,13 +166,6 @@ class Gift(Item):
     '''
     A gift to make a character like you
     '''
-
-    def __init__(self, name, description, value) -> None:
-        '''
-        Initialises the object
-        '''
-        super().__init__(name, description)
-        self.value = value
 
 
 class Weapon(Item):
