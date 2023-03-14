@@ -33,25 +33,23 @@ class Character:
         '''
         Returns the character conversation
         '''
-        return self.conversation
+        print(f'[{self.name} says]: {self.conversation}')
 
     def describe(self):
         '''
         Describes the character
         '''
-        print(self)
+        print(f'{self.name} is here!\n{self.description}')
 
 
 class Enemy(Character):
     '''
     An enemy object for the game
     '''
-    defeated_count = 0
 
-    def set_weakness(self, weakness):
-        '''
-        Sets the character weakness
-        '''
+    def __init__(self, name, description, weakness) -> None:
+        super().__init__(name, description)
+        self.defeated = False
         self.weakness = weakness
 
     def fight(self, item):
@@ -59,15 +57,9 @@ class Enemy(Character):
         Simulates a fight
         '''
         if self.weakness == item:
-            Enemy.defeated_count += 1
+            self.defeated += 1
             return True
         return False
-
-    def get_defeated(self):
-        '''
-        Returns the number of defeats for the character
-        '''
-        return Enemy.defeated_count
 
     def describe(self):
         '''
@@ -84,18 +76,69 @@ class Friend(Character):
     A friend object for the game
     '''
 
+    def __init__(self, name, description, recruit_item) -> None:
+        '''
+        Initializes the object
+        '''
+        super().__init__(name, description)
+        self.recruit_item = recruit_item
+
+    def gift(self, item):
+        '''
+        Uses the gift and returns success/failure
+        '''
+        return item == self.recruit_item
+
+
+class Student(Friend):
+    '''
+    A student class
+    '''
+
+    def __init__(self, name, description, recruit_item, health) -> None:
+        '''
+        Initializes the object
+        '''
+        super().__init__(name, description, recruit_item)
+        self.health = health
+
+    def give_health(self):
+        '''
+        Simulates the student taking a hit for you in a simple way
+        '''
+        return self.health
+
+
+class Cavaler(Friend):
+    '''
+    A cavaler class
+    '''
+
+    def __init__(self, name, description, recruit_item, weapon) -> None:
+        '''
+        Initializes the object
+        '''
+        super().__init__(name, description, recruit_item)
+        self.weapon = weapon
+
+    def get_weapon(self):
+        '''
+        Gets the cavaler's weapon to use
+        '''
+        return self.weapon
+
 
 class Item:
     '''
     An item object for the game
     '''
 
-    def __init__(self, name) -> None:
+    def __init__(self, name, description) -> None:
         '''
         Initializes the object
         '''
         self.name = name
-        self.description = None
+        self.description = description
 
     def __str__(self) -> str:
         '''
@@ -119,26 +162,20 @@ class Item:
         '''
         Describes the item
         '''
-        print(self)
+        print(f'The [{self.name}] is here - {self.description}')
 
 
 class Gift(Item):
     '''
-    A weapon to make a character like you
+    A gift to make a character like you
     '''
 
-    def __init__(self, name, value) -> None:
+    def __init__(self, name, description, value) -> None:
         '''
         Initialises the object
         '''
-        super().__init__(name)
+        super().__init__(name, description)
         self.value = value
-
-    def use(self, threshold_value):
-        '''
-        Uses the gift and returns success/failure
-        '''
-        return self.value > threshold_value
 
 
 class Weapon(Item):
@@ -146,11 +183,11 @@ class Weapon(Item):
     A weapon to fight with
     '''
 
-    def __init__(self, name, uses) -> None:
+    def __init__(self, name, description, uses) -> None:
         '''
         Initialises the object
         '''
-        super().__init__(name)
+        super().__init__(name, description)
         self.uses = uses
 
     def use(self):
@@ -217,7 +254,7 @@ class Location:
         '''
         self.item = item
 
-    def link_room(self, location, direction):
+    def link_location(self, location, direction):
         '''
         Links a location to one of the directions
         '''
@@ -227,17 +264,18 @@ class Location:
 
     def get_details(self):
         '''
-        Prints the room details
+        Prints the location details
         '''
-        print(
-            f'{self.name} - {self.description}\n'
-            f'North - {self.north}\n'
-            f'East - {self.east}\n'
-            f'West - {self.west}\n'
-            f'South - {self.south}\n'
-            f'Character: {self.character}\n'
-            f'Item: {self.item}'
-        )
+        text = f'{self.name}\n--------------------\n{self.description}\n'
+        if self.north:
+            text += f'The {self.north.name} is north\n'
+        if self.east:
+            text += f'The {self.east.name} is east\n'
+        if self.west:
+            text += f'The {self.west.name} is west\n'
+        if self.south:
+            text += f'The {self.south.name} is south\n'
+        print(text)
 
     def move(self, command):
         '''
